@@ -91,24 +91,11 @@ abstract class WordRoomDatabase : RoomDatabase() {
             INSTANCE?.let { database ->
                 scope.launch(Dispatchers.IO) {
 
-                    populateDatabase(database.wordDao())
-                }
+                    database.wordDao().deleteAll()                }
             }
         }
 
-        suspend fun populateDatabase(wordDao: WordDao) {
-            // Start the app with a clean database every time.
-            // Not needed if you only populate on creation.
 
-
-            // Delete all content here.
-            wordDao.deleteAll()
-
-            // Add sample words.
-            var word = Word("Let Populate The Database by Add Some Data")
-            wordDao.insert(word)
-
-        }
     }
     }
 

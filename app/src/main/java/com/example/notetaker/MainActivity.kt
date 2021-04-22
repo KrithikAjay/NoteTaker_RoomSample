@@ -3,12 +3,13 @@ package com.example.notetaker
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -22,18 +23,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-         textView = findViewById(R.id.textView2)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
+        val adapter = WordListAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
 
         wordViewModel.allWords.observe(this, Observer { words ->
             // Update the cached copy of the words in the adapter.
             words?.let {
-                var strArr : MutableList<String> = mutableListOf("")
-                for(word in words){
-                    Log.i("ArrayOfWord",word.word)
-                    strArr.add(word.word)
-
-                }
-                textView.text = strArr.joinToString(separator = "\n")
+               adapter.submitList(it)
             }
         })
         val fab = findViewById<FloatingActionButton>(R.id.fab)
